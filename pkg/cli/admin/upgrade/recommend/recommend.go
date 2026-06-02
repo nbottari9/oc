@@ -132,7 +132,6 @@ func (o *options) Complete(f kcmdutil.Factory, cmd *cobra.Command, args []string
 			o.version = &version
 		}
 	}
-
 	return nil
 }
 

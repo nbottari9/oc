@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strings"
 
+	configv1 "github.com/openshift/api/config/v1"
+	"github.com/openshift/api/features"
 	routev1 "github.com/openshift/api/route/v1"
 	routev1client "github.com/openshift/client-go/route/clientset/versioned/typed/route/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -20,6 +22,19 @@ import (
 // and Unknown when we do not have enough information to make a
 // happy-or-sad determination.
 func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
+
+	if o.Client != nil {
+		featureGates, _ := o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
+		infrastructure, _ := o.Client.ConfigV1().Infrastructures().Get(ctx, "cluster", metav1.GetOptions{})
+		cv, _ := o.Client.ConfigV1().ClusterVersions().Get(ctx, "version", metav1.GetOptions{})
+
+		// if the AcceptRisks feature gate AND hypershift is not enabled,
+		// the CVO is handling alerts and will generate the Recommended condition if needed
+		if cv != nil && isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHypershiftEnabled(infrastructure) {
+			return nil, nil
+		}
+	}
+
 	var alertsBytes []byte
 	if o.mockData.alertsPath != "" {
 		if len(o.mockData.alerts) == 0 {
@@ -250,4 +265,31 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 	}
 
 	return conditions, nil
+}
+
+// isAcceptRisksEnabled checks to see if the 'ClusterUpdateAcceptRisks' feature gate is enabled
+// if so, return true to skip client-side alert checking
+func isAcceptRisksEnabled(featureGate *configv1.FeatureGate, clusterVersion string) bool {
+	if featureGate == nil {
+		return false
+	}
+
+	for _, versionedGates := range featureGate.Status.FeatureGates {
+		if versionedGates.Version == clusterVersion {
+			for _, enabledGate := range versionedGates.Enabled {
+				if enabledGate.Name == features.FeatureGateClusterUpdateAcceptRisks {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func isHypershiftEnabled(i *configv1.Infrastructure) bool {
+	if i == nil {
+		return false
+	}
+
+	return i.Status.ControlPlaneTopology == configv1.ExternalTopologyMode
 }
