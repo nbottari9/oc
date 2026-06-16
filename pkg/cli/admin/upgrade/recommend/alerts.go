@@ -12,6 +12,7 @@ import (
 	routev1client "github.com/openshift/client-go/route/clientset/versioned/typed/route/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
+	"k8s.io/klog/v2"
 
 	"github.com/openshift/oc/pkg/cli/admin/inspectalerts"
 	"github.com/openshift/oc/pkg/cli/admin/upgrade/status"
@@ -22,17 +23,12 @@ import (
 // and Unknown when we do not have enough information to make a
 // happy-or-sad determination.
 func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
-
-	if o.Client != nil {
-		featureGates, _ := o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
-		infrastructure, _ := o.Client.ConfigV1().Infrastructures().Get(ctx, "cluster", metav1.GetOptions{})
-		cv, _ := o.Client.ConfigV1().ClusterVersions().Get(ctx, "version", metav1.GetOptions{})
-
-		// if the AcceptRisks feature gate AND hypershift is not enabled,
-		// the CVO is handling alerts and will generate the Recommended condition if needed
-		if cv != nil && isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHypershiftEnabled(infrastructure) {
-			return nil, nil
-		}
+	skip, err := o.alertsEvaluatedByCVO(ctx)
+	if err != nil {
+		klog.Warningf("An error occured while determining if the CVO is evaluating alerts, so the client will check. %v", err)
+	}
+	if skip {
+		return nil, nil
 	}
 
 	var alertsBytes []byte
@@ -74,7 +70,7 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 	}
 
 	var alertData status.AlertData
-	err := json.Unmarshal(alertsBytes, &alertData)
+	err = json.Unmarshal(alertsBytes, &alertData)
 	if err != nil {
 		return nil, fmt.Errorf("parsing alerts: %w", err)
 	}
@@ -265,6 +261,33 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 	}
 
 	return conditions, nil
+}
+
+// alertsEvaluatedByCVO makes API calls to determine if we need to do client-side alert checking
+func (o *options) alertsEvaluatedByCVO(ctx context.Context) (bool, error) {
+	featureGates, err := o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	infrastructure, err := o.Client.ConfigV1().Infrastructures().Get(ctx, "cluster", metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	cv, err := o.Client.ConfigV1().ClusterVersions().Get(ctx, "version", metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	// if the AcceptRisks feature gate AND hypershift is not enabled,
+	// the CVO is handling alerts and will generate the Recommended condition if needed
+	if isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHypershiftEnabled(infrastructure) {
+		return true, nil
+	}
+
+	// if we get to this point, check on the client anyway to be safe
+	return false, fmt.Errorf("Failed to detect presence of CVO and/or if Hypershift is enabled")
 }
 
 // isAcceptRisksEnabled checks to see if the 'ClusterUpdateAcceptRisks' feature gate is enabled
