@@ -69,6 +69,24 @@ func TestIsAcceptRisksEnabled(t *testing.T) {
 			},
 			expected: false,
 		},
+		{
+			name: "ClusterUpdateAcceptRisks feature gate is enabled for a different cluster version",
+			featureGateConfig: &configv1.FeatureGate{
+				Status: configv1.FeatureGateStatus{
+					FeatureGates: []configv1.FeatureGateDetails{
+						{
+							Version: "4.21.0",
+							Enabled: []configv1.FeatureGateAttributes{
+								{
+									Name: features.FeatureGateClusterUpdateAcceptRisks,
+								},
+							},
+						},
+					},
+				},
+			},
+			expected: false,
+		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
 			actual := isAcceptRisksEnabled(testCase.featureGateConfig, "4.22.0")

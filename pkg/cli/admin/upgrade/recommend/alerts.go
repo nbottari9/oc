@@ -265,19 +265,30 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 
 // alertsEvaluatedByCVO makes API calls to determine if we need to do client-side alert checking
 func (o *options) alertsEvaluatedByCVO(ctx context.Context) (bool, error) {
-	featureGates, err := o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
-	if err != nil {
-		return false, err
-	}
+	var featureGates *configv1.FeatureGate
+	var infrastructure *configv1.Infrastructure
+	var cv *configv1.ClusterVersion
 
-	infrastructure, err := o.Client.ConfigV1().Infrastructures().Get(ctx, "cluster", metav1.GetOptions{})
-	if err != nil {
-		return false, err
-	}
+	if o.mockData.cvPath != "" {
+		featureGates = o.mockData.featureGate
+		infrastructure = o.mockData.infrastructure
+		cv = o.mockData.clusterVersion
+	} else {
+		var err error
+		featureGates, err = o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
+		if err != nil {
+			return false, err
+		}
 
-	cv, err := o.Client.ConfigV1().ClusterVersions().Get(ctx, "version", metav1.GetOptions{})
-	if err != nil {
-		return false, err
+		infrastructure, err = o.Client.ConfigV1().Infrastructures().Get(ctx, "cluster", metav1.GetOptions{})
+		if err != nil {
+			return false, err
+		}
+
+		cv, err = o.Client.ConfigV1().ClusterVersions().Get(ctx, "version", metav1.GetOptions{})
+		if err != nil {
+			return false, err
+		}
 	}
 
 	// if the AcceptRisks feature gate AND hypershift is not enabled,

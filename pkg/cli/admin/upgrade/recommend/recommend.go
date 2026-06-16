@@ -111,6 +111,8 @@ func (o *options) Complete(f kcmdutil.Factory, cmd *cobra.Command, args []string
 	} else {
 		cvSuffix := "-cv.yaml"
 		o.mockData.alertsPath = strings.Replace(o.mockData.cvPath, cvSuffix, "-alerts.json", 1)
+		o.mockData.featureGatePath = strings.Replace(o.mockData.cvPath, cvSuffix, "-featuregate.yaml", 1)
+		o.mockData.infrastructurePath = strings.Replace(o.mockData.cvPath, cvSuffix, "-infrastructure.yaml", 1)
 		err := o.mockData.load()
 		if err != nil {
 			return err
