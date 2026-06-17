@@ -23,11 +23,9 @@ import (
 // and Unknown when we do not have enough information to make a
 // happy-or-sad determination.
 func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
-	skip, err := o.alertsEvaluatedByCVO(ctx)
-	if err != nil {
+	if skip, err := o.alertsEvaluatedByCVO(ctx); err != nil {
 		klog.Warningf("An error occured while determining if the CVO is evaluating alerts, so the client will check. %v", err)
-	}
-	if skip {
+	} else if skip {
 		return nil, nil
 	}
 
@@ -70,7 +68,7 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 	}
 
 	var alertData status.AlertData
-	err = json.Unmarshal(alertsBytes, &alertData)
+	err := json.Unmarshal(alertsBytes, &alertData)
 	if err != nil {
 		return nil, fmt.Errorf("parsing alerts: %w", err)
 	}
@@ -265,15 +263,10 @@ func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
 
 // alertsEvaluatedByCVO makes API calls to determine if we need to do client-side alert checking
 func (o *options) alertsEvaluatedByCVO(ctx context.Context) (bool, error) {
-	var featureGates *configv1.FeatureGate
-	var infrastructure *configv1.Infrastructure
-	var cv *configv1.ClusterVersion
-
-	if o.mockData.cvPath != "" {
-		featureGates = o.mockData.featureGate
-		infrastructure = o.mockData.infrastructure
-		cv = o.mockData.clusterVersion
-	} else {
+	featureGates := o.mockData.featureGate
+	infrastructure := o.mockData.infrastructure
+	cv := o.mockData.clusterVersion
+	if cv == nil {
 		var err error
 		featureGates, err = o.Client.ConfigV1().FeatureGates().Get(ctx, "cluster", metav1.GetOptions{})
 		if err != nil {
@@ -291,14 +284,9 @@ func (o *options) alertsEvaluatedByCVO(ctx context.Context) (bool, error) {
 		}
 	}
 
-	// if the AcceptRisks feature gate AND hypershift is not enabled,
+	// if the AcceptRisks feature gate AND oc is not running against a hosted cluster,
 	// the CVO is handling alerts and will generate the Recommended condition if needed
-	if isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHypershiftEnabled(infrastructure) {
-		return true, nil
-	}
-
-	// if we get to this point, check on the client anyway to be safe
-	return false, fmt.Errorf("Failed to detect presence of CVO and/or if Hypershift is enabled")
+	return isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHostedCluster(infrastructure), nil
 }
 
 // isAcceptRisksEnabled checks to see if the 'ClusterUpdateAcceptRisks' feature gate is enabled
@@ -320,10 +308,6 @@ func isAcceptRisksEnabled(featureGate *configv1.FeatureGate, clusterVersion stri
 	return false
 }
 
-func isHypershiftEnabled(i *configv1.Infrastructure) bool {
-	if i == nil {
-		return false
-	}
-
-	return i.Status.ControlPlaneTopology == configv1.ExternalTopologyMode
+func isHostedCluster(i *configv1.Infrastructure) bool {
+	return i != nil && i.Status.ControlPlaneTopology == configv1.ExternalTopologyMode
 }

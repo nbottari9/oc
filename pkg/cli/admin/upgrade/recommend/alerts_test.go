@@ -128,7 +128,7 @@ func TestIsHypershiftEnabled(t *testing.T) {
 		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
-			actual := isHypershiftEnabled(testCase.infrastructure)
+			actual := isHostedCluster(testCase.infrastructure)
 
 			if actual != testCase.expected {
 				t.Errorf("%v != %v", actual, testCase.expected)
