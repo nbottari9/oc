@@ -70,6 +70,7 @@ func TestExamples(t *testing.T) {
 				"examples/4.19.0-okd-scos.16-cv.yaml":                       "4.19.0-okd-scos.17",
 				"examples/4.22.0-extend-recommended-alert-cv.yaml":          "1.2.3-not-important",
 				"examples/4.22.0-extend-recommended-critical-alert-cv.yaml": "1.2.3-not-important",
+				"examples/5.0.0-cvo-handling-risks-cv.yaml":                 "1.2.3-not-important",
 			},
 			outputSuffixPattern: ".version-%s-output",
 		},

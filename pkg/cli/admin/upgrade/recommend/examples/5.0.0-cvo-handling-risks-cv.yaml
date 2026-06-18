@@ -1,0 +1,103 @@
+apiVersion: config.openshift.io/v1
+kind: ClusterVersion
+metadata:
+  creationTimestamp: "2026-06-18T16:45:59Z"
+  generation: 2
+  name: version
+  resourceVersion: "32889"
+  uid: df6f5ec1-6287-49c2-b763-7ca55c8d7c4a
+spec:
+  clusterID: 0cbb9b16-2f80-4b25-bb1e-82679443eeac
+  overrides:
+  - group: config.openshift.io
+    kind: ClusterImagePolicy
+    name: openshift
+    namespace: ""
+    unmanaged: true
+status:
+  availableUpdates: null
+  capabilities:
+    enabledCapabilities:
+    - Build
+    - CSISnapshot
+    - CloudControllerManager
+    - CloudCredential
+    - Console
+    - DeploymentConfig
+    - ImageRegistry
+    - Ingress
+    - Insights
+    - MachineAPI
+    - NodeTuning
+    - OperatorLifecycleManager
+    - OperatorLifecycleManagerV1
+    - Storage
+    - baremetal
+    - marketplace
+    - openshift-samples
+    knownCapabilities:
+    - Build
+    - CSISnapshot
+    - CloudControllerManager
+    - CloudCredential
+    - Console
+    - DeploymentConfig
+    - ImageRegistry
+    - Ingress
+    - Insights
+    - MachineAPI
+    - NodeTuning
+    - OperatorLifecycleManager
+    - OperatorLifecycleManagerV1
+    - Storage
+    - baremetal
+    - marketplace
+    - openshift-samples
+  conditions:
+  - lastTransitionTime: "2026-06-18T16:46:44Z"
+    message: The update channel has not been configured.
+    reason: NoChannel
+    status: "False"
+    type: RetrievedUpdates
+  - lastTransitionTime: "2026-06-18T16:46:44Z"
+    message: |-
+      Cluster should not be upgraded between minor or major versions for multiple reasons:
+      * Disabling ownership via cluster version overrides prevents updates between minor or major versions. Please remove overrides before requesting a minor or major version update.
+      * FeatureGatesUpgradeable: "TechPreviewNoUpgrade" does not allow updates
+    reason: MultipleReasons
+    status: "False"
+    type: Upgradeable
+  - lastTransitionTime: "2026-06-18T16:46:44Z"
+    message: Capabilities match configured spec
+    reason: AsExpected
+    status: "False"
+    type: ImplicitlyEnabledCapabilities
+  - lastTransitionTime: "2026-06-18T16:46:44Z"
+    message: Payload loaded version="5.0.0-0.nightly-2026-06-18-000016" image="registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8"
+      architecture="amd64"
+    reason: PayloadLoaded
+    status: "True"
+    type: ReleaseAccepted
+  - lastTransitionTime: "2026-06-18T17:16:06Z"
+    message: Done applying 5.0.0-0.nightly-2026-06-18-000016
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2026-06-18T17:16:06Z"
+    status: "False"
+    type: Failing
+  - lastTransitionTime: "2026-06-18T17:16:06Z"
+    message: Cluster version is 5.0.0-0.nightly-2026-06-18-000016
+    status: "False"
+    type: Progressing
+  desired:
+    image: registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8
+    version: 5.0.0-0.nightly-2026-06-18-000016
+  history:
+  - completionTime: "2026-06-18T17:16:06Z"
+    image: registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8
+    startedTime: "2026-06-18T16:46:44Z"
+    state: Completed
+    verified: false
+    version: 5.0.0-0.nightly-2026-06-18-000016
+  observedGeneration: 2
+  versionHash: 3WXMtJd4snY=
