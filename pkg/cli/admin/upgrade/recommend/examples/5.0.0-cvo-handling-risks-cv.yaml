@@ -1,13 +1,14 @@
 apiVersion: config.openshift.io/v1
 kind: ClusterVersion
 metadata:
-  creationTimestamp: "2026-06-18T16:45:59Z"
-  generation: 2
+  creationTimestamp: "2026-06-22T17:25:19Z"
+  generation: 3
   name: version
-  resourceVersion: "32889"
-  uid: df6f5ec1-6287-49c2-b763-7ca55c8d7c4a
+  resourceVersion: "63760"
+  uid: bc00f3f2-da92-4342-9882-ac16001b3d13
 spec:
-  clusterID: 0cbb9b16-2f80-4b25-bb1e-82679443eeac
+  channel: candidate-5.0
+  clusterID: ab59f554-a72f-40c3-87e7-49ebec220e4f
   overrides:
   - group: config.openshift.io
     kind: ClusterImagePolicy
@@ -53,51 +54,118 @@ status:
     - baremetal
     - marketplace
     - openshift-samples
+  conditionalUpdateRisks:
+  - conditions:
+    - lastTransitionTime: "2026-06-22T18:19:01Z"
+      message: 'warning alert PodDisruptionBudgetAtLimit firing, which might slow
+        node drains. Namespace=openshift-monitoring, PodDisruptionBudget=prometheus-k8s.
+        The pod disruption budget is preventing further disruption to pods. The alert
+        description is: The pod disruption budget is at the minimum disruptions allowed
+        level. The number of current healthy pods is equal to the desired healthy
+        pods. https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md'
+      reason: Alert:firing
+      status: "True"
+      type: Applies
+    matchingRules:
+    - type: Always
+    message: The pod disruption budget is preventing further disruption to pods.
+    name: PodDisruptionBudgetAtLimit
+    url: https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md
+  conditionalUpdates:
+  - conditions:
+    - lastTransitionTime: "2026-06-22T19:30:17Z"
+      message: The pod disruption budget is preventing further disruption to pods.
+        https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md
+      reason: PodDisruptionBudgetAtLimit
+      status: "False"
+      type: Recommended
+    release:
+      channels:
+      - candidate-5.0
+      image: quay.io/openshift-release-dev/ocp-release@sha256:b5ad6b4bb5efbd9b9d88bd42182e85388742b4441a2ff4301c4f5aa8176d5d29
+      version: 5.0.0-ec.3
+    riskNames:
+    - PodDisruptionBudgetAtLimit
+    risks:
+    - conditions:
+      - lastTransitionTime: "2026-06-22T18:19:01Z"
+        message: 'warning alert PodDisruptionBudgetAtLimit firing, which might slow
+          node drains. Namespace=openshift-monitoring, PodDisruptionBudget=prometheus-k8s.
+          The pod disruption budget is preventing further disruption to pods. The
+          alert description is: The pod disruption budget is at the minimum disruptions
+          allowed level. The number of current healthy pods is equal to the desired
+          healthy pods. https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md'
+        reason: Alert:firing
+        status: "True"
+        type: Applies
+      matchingRules:
+      - type: Always
+      message: The pod disruption budget is preventing further disruption to pods.
+      name: PodDisruptionBudgetAtLimit
+      url: https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md
   conditions:
-  - lastTransitionTime: "2026-06-18T16:46:44Z"
-    message: The update channel has not been configured.
-    reason: NoChannel
-    status: "False"
+  - lastTransitionTime: "2026-06-22T19:30:17Z"
+    status: "True"
     type: RetrievedUpdates
-  - lastTransitionTime: "2026-06-18T16:46:44Z"
+  - lastTransitionTime: "2026-06-22T17:26:06Z"
     message: |-
-      Cluster should not be upgraded between minor or major versions for multiple reasons:
-      * Disabling ownership via cluster version overrides prevents updates between minor or major versions. Please remove overrides before requesting a minor or major version update.
-      * FeatureGatesUpgradeable: "TechPreviewNoUpgrade" does not allow updates
+      Cluster should not be upgraded between minor or major versions for multiple reasons: ClusterVersionOverridesSet,FeatureGates_RestrictedFeatureGates_TechPreviewNoUpgrade
+      * Disabling ownership via cluster version overrides prevents upgrades between minor or major versions. Please remove overrides before requesting a minor or major version update.
+      * Cluster operator config-operator should not be upgraded between minor or major versions: FeatureGatesUpgradeable: "TechPreviewNoUpgrade" does not allow updates
     reason: MultipleReasons
     status: "False"
     type: Upgradeable
-  - lastTransitionTime: "2026-06-18T16:46:44Z"
+  - lastTransitionTime: "2026-06-22T17:26:06Z"
     message: Capabilities match configured spec
     reason: AsExpected
     status: "False"
     type: ImplicitlyEnabledCapabilities
-  - lastTransitionTime: "2026-06-18T16:46:44Z"
-    message: Payload loaded version="5.0.0-0.nightly-2026-06-18-000016" image="registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8"
+  - lastTransitionTime: "2026-06-22T17:26:06Z"
+    message: Payload loaded version="5.0.0-ec.2" image="registry.build12.ci.openshift.org/ci-ln-8np31z2/release@sha256:e8f74fa0423f416cdcd6b35a0769765118c0f8ba9d7e0e25517e41c59483c6af"
       architecture="amd64"
     reason: PayloadLoaded
     status: "True"
     type: ReleaseAccepted
-  - lastTransitionTime: "2026-06-18T17:16:06Z"
-    message: Done applying 5.0.0-0.nightly-2026-06-18-000016
+  - lastTransitionTime: "2026-06-22T17:58:15Z"
+    message: Done applying 5.0.0-ec.2
     status: "True"
     type: Available
-  - lastTransitionTime: "2026-06-18T17:16:06Z"
-    status: "False"
+  - lastTransitionTime: "2026-06-22T18:53:00Z"
+    message: Cluster operator monitoring is degraded
+    reason: ClusterOperatorDegraded
+    status: "True"
     type: Failing
-  - lastTransitionTime: "2026-06-18T17:16:06Z"
-    message: Cluster version is 5.0.0-0.nightly-2026-06-18-000016
+  - lastTransitionTime: "2026-06-22T17:58:15Z"
+    message: 'Error while reconciling 5.0.0-ec.2: the cluster operator monitoring
+      is degraded'
+    reason: ClusterOperatorDegraded
     status: "False"
     type: Progressing
+  - lastTransitionTime: "2026-06-22T17:26:51Z"
+    message: Disabling ownership via cluster version overrides prevents upgrades between
+      minor or major versions. Please remove overrides before requesting a minor or
+      major version update.
+    reason: ClusterVersionOverridesSet
+    status: "False"
+    type: UpgradeableClusterVersionOverrides
+  - lastTransitionTime: "2026-06-22T17:31:17Z"
+    message: 'Cluster operator config-operator should not be upgraded between minor
+      or major versions: FeatureGatesUpgradeable: "TechPreviewNoUpgrade" does not
+      allow updates'
+    reason: FeatureGates_RestrictedFeatureGates_TechPreviewNoUpgrade
+    status: "False"
+    type: UpgradeableClusterOperators
   desired:
-    image: registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8
-    version: 5.0.0-0.nightly-2026-06-18-000016
+    channels:
+    - candidate-5.0
+    image: registry.build12.ci.openshift.org/ci-ln-8np31z2/release@sha256:e8f74fa0423f416cdcd6b35a0769765118c0f8ba9d7e0e25517e41c59483c6af
+    version: 5.0.0-ec.2
   history:
-  - completionTime: "2026-06-18T17:16:06Z"
-    image: registry.build12.ci.openshift.org/ci-ln-gsv92fb/release@sha256:53a5158cf59349bd674c2fb5a40074c6a141ea2908b6a87a56bab704b18c44b8
-    startedTime: "2026-06-18T16:46:44Z"
+  - completionTime: "2026-06-22T17:58:15Z"
+    image: registry.build12.ci.openshift.org/ci-ln-8np31z2/release@sha256:e8f74fa0423f416cdcd6b35a0769765118c0f8ba9d7e0e25517e41c59483c6af
+    startedTime: "2026-06-22T17:26:06Z"
     state: Completed
     verified: false
-    version: 5.0.0-0.nightly-2026-06-18-000016
+    version: 5.0.0-ec.2
   observedGeneration: 2
-  versionHash: 3WXMtJd4snY=
+  versionHash: cUYyzI3AJLo=

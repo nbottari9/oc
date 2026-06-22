@@ -12,7 +12,8 @@ import (
 	routev1client "github.com/openshift/client-go/route/clientset/versioned/typed/route/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
-	"k8s.io/klog/v2"
+
+	// "k8s.io/klog/v2"
 
 	"github.com/openshift/oc/pkg/cli/admin/inspectalerts"
 	"github.com/openshift/oc/pkg/cli/admin/upgrade/status"
@@ -23,11 +24,11 @@ import (
 // and Unknown when we do not have enough information to make a
 // happy-or-sad determination.
 func (o *options) alerts(ctx context.Context) ([]acceptableCondition, error) {
-	if skip, err := o.alertsEvaluatedByCVO(ctx); err != nil {
-		klog.Warningf("An error occured while determining if the CVO is evaluating alerts, so the client will check. %v", err)
-	} else if skip {
-		return nil, nil
-	}
+	// if skip, err := o.alertsEvaluatedByCVO(ctx); err != nil {
+	// 	klog.Warningf("An error occured while determining if the CVO is evaluating alerts, so the client will check. %v", err)
+	// } else if skip {
+	// 	return nil, nil
+	// }
 
 	var alertsBytes []byte
 	if o.mockData.alertsPath != "" {

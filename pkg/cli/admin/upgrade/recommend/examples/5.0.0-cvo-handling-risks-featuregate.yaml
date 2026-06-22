@@ -3,11 +3,11 @@ kind: FeatureGate
 metadata:
   annotations:
     include.release.openshift.io/self-managed-high-availability: "true"
-  creationTimestamp: "2026-06-18T16:46:19Z"
+  creationTimestamp: "2026-06-22T17:25:39Z"
   generation: 1
   name: cluster
-  resourceVersion: "728"
-  uid: 5a8c95c7-ca06-4bec-849c-e7426013ef61
+  resourceVersion: "718"
+  uid: e6d830fe-e07a-4276-8730-fc8d9089d10e
 spec:
   featureSet: TechPreviewNoUpgrade
 status:
@@ -24,17 +24,13 @@ status:
     - name: ExternalOIDCExternalClaimsSourcing
     - name: ExternalSnapshotMetadata
     - name: HyperShiftOnlyDynamicResourceAllocation
-    - name: MachineAPIMigrationAzure
-    - name: MachineAPIMigrationBareMetal
-    - name: MachineAPIMigrationGCP
-    - name: MachineAPIMigrationPowerVS
     - name: MachineAPIMigrationVSphere
     - name: MachineAPIOperatorDisableMachineHealthCheckController
     - name: MultiArchInstallAzure
-    - name: MutableTopology
     - name: NetworkConnect
     - name: ProvisioningRequestAvailable
     - name: ShortCertRotation
+    - name: VSphereMultiVCenterDay2
     enabled:
     - name: AWSClusterHostedDNS
     - name: AWSClusterHostedDNSInstall
@@ -102,7 +98,6 @@ status:
     - name: MultiDiskSetup
     - name: MutableCSINodeAllocatableCount
     - name: MutatingAdmissionPolicy
-    - name: NetworkObservabilityInstall
     - name: NewOLM
     - name: NewOLMBoxCutterRuntime
     - name: NewOLMCatalogdAPIV1Metas
@@ -118,7 +113,6 @@ status:
     - name: OVNObservability
     - name: OnPremDNSRecords
     - name: OpenShiftPodSecurityAdmission
-    - name: RouteExternalCertificate
     - name: SELinuxMount
     - name: ServiceAccountTokenNodeBinding
     - name: SignatureStores
@@ -126,13 +120,11 @@ status:
     - name: SigstoreImageVerificationPKI
     - name: StoragePerformantSecurityPolicy
     - name: TLSAdherence
-    - name: TLSGroupPreferences
     - name: UpgradeStatus
     - name: VSphereConfigurableMaxAllowedBlockVolumesPerNode
     - name: VSphereHostVMGroupZonal
     - name: VSphereMixedNodeEnv
     - name: VSphereMultiDisk
     - name: VSphereMultiNetworks
-    - name: VSphereMultiVCenterDay2
     - name: VolumeGroupSnapshot
-    version: 5.0.0-0.nightly-2026-06-18-000016
+    version: 5.0.0-ec.2

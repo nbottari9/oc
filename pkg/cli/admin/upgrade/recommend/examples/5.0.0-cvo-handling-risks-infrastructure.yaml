@@ -1,11 +1,11 @@
 apiVersion: config.openshift.io/v1
 kind: Infrastructure
 metadata:
-  creationTimestamp: "2026-06-18T16:45:51Z"
+  creationTimestamp: "2026-06-22T17:25:11Z"
   generation: 1
   name: cluster
-  resourceVersion: "591"
-  uid: 5bd60047-c83f-4891-9175-c6eab065e71b
+  resourceVersion: "580"
+  uid: e7ac2dd3-5925-44fa-b93d-fc2461223d6a
 spec:
   cloudConfig:
     key: config
@@ -13,12 +13,12 @@ spec:
   platformSpec:
     type: GCP
 status:
-  apiServerInternalURI: https://api-int.ci-ln-gsv92fb-72292.gcp-2.ci.openshift.org:6443
-  apiServerURL: https://api.ci-ln-gsv92fb-72292.gcp-2.ci.openshift.org:6443
+  apiServerInternalURI: https://api-int.ci-ln-8np31z2-72292.gcp-2.ci.openshift.org:6443
+  apiServerURL: https://api.ci-ln-8np31z2-72292.gcp-2.ci.openshift.org:6443
   controlPlaneTopology: HighlyAvailable
   cpuPartitioning: None
   etcdDiscoveryDomain: ""
-  infrastructureName: ci-ln-gsv92fb-72292-gw5gc
+  infrastructureName: ci-ln-8np31z2-72292-nzmck
   infrastructureTopology: HighlyAvailable
   platform: GCP
   platformStatus:
