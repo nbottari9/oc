@@ -12,7 +12,6 @@ import (
 	routev1client "github.com/openshift/client-go/route/clientset/versioned/typed/route/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
-
 	"k8s.io/klog/v2"
 
 	"github.com/openshift/oc/pkg/cli/admin/inspectalerts"
@@ -285,7 +284,7 @@ func (o *options) alertsEvaluatedByCVO(ctx context.Context) (bool, error) {
 		}
 	}
 
-	// if the AcceptRisks feature gate AND oc is not running against a hosted cluster,
+	// if the AcceptRisks feature gate is enabled AND oc is not running against a hosted cluster,
 	// the CVO is handling alerts and will generate the Recommended condition if needed
 	return isAcceptRisksEnabled(featureGates, cv.Status.Desired.Version) && !isHostedCluster(infrastructure), nil
 }

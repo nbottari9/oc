@@ -15,8 +15,7 @@ func TestIsAcceptRisksEnabled(t *testing.T) {
 		expected          bool
 	}{
 		{
-			name:     "no feature gates",
-			expected: false,
+			name: "no feature gates",
 		},
 		{
 			name: "ClusterUpdateAcceptRisks feature gate is enabled",
@@ -52,7 +51,6 @@ func TestIsAcceptRisksEnabled(t *testing.T) {
 					},
 				},
 			},
-			expected: false,
 		},
 		{
 			name: "ClusterUpdateAcceptRisks feature gate is not explicitly enabled or disabled",
@@ -67,7 +65,6 @@ func TestIsAcceptRisksEnabled(t *testing.T) {
 					},
 				},
 			},
-			expected: false,
 		},
 		{
 			name: "ClusterUpdateAcceptRisks feature gate is enabled for a different cluster version",
@@ -85,7 +82,6 @@ func TestIsAcceptRisksEnabled(t *testing.T) {
 					},
 				},
 			},
-			expected: false,
 		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -105,8 +101,7 @@ func TestIsHypershiftEnabled(t *testing.T) {
 		expected       bool
 	}{
 		{
-			name:     "no infrastructure",
-			expected: false,
+			name: "no infrastructure",
 		},
 		{
 			name: "hypershift enabled",
@@ -124,7 +119,6 @@ func TestIsHypershiftEnabled(t *testing.T) {
 					ControlPlaneTopology: configv1.HighlyAvailableTopologyMode,
 				},
 			},
-			expected: false,
 		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
