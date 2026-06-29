@@ -1,0 +1,18 @@
+Failing=True:
+
+  Reason: ClusterOperatorDegraded
+  Message: Cluster operator monitoring is degraded
+
+The following conditions found no cause for concern in updating this cluster to later releases: recommended/CriticalAlerts (AsExpected), recommended/NodeAlerts (AsExpected), recommended/PodImagePullAlerts (AsExpected), recommended/UpdatePrecheckAlerts (AsExpected)
+
+The following conditions found cause for concern in updating this cluster to later releases: recommended/PodDisruptionBudgetAlerts/PodDisruptionBudgetAtLimit/0
+
+recommended/PodDisruptionBudgetAlerts/PodDisruptionBudgetAtLimit/0=False:
+
+  Reason: Alert:firing
+  Message: warning alert PodDisruptionBudgetAtLimit firing, which might slow node drains. Namespace=openshift-monitoring, PodDisruptionBudget=prometheus-k8s. The pod disruption budget is preventing further disruption to pods. The alert description is: The pod disruption budget is at the minimum disruptions allowed level. The number of current healthy pods is equal to the desired healthy pods. https://github.com/openshift/runbooks/blob/master/alerts/cluster-kube-controller-manager-operator/PodDisruptionBudgetAtLimit.md
+
+Upstream update service is unset, so the cluster will use an appropriate default.
+Channel: candidate-5.0 (available channels: candidate-5.0)
+
+error: no updates to 1 available, so cannot display context for the requested release 1.2.3-not-important
