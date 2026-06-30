@@ -193,6 +193,12 @@ func (o *options) Run(ctx context.Context) error {
 		}
 		issues.Insert("FailedToCompletePrecheck")
 	}
+
+	cvoChecking, err := o.alertsEvaluatedByCVO(ctx)
+	if cvoChecking && len(o.accept) > 0 {
+		return fmt.Errorf("Cluster update risks are being handled by the Cluster Version Operator (CVO). Please use `oc adm upgrade accept ...` to accept risks.\n")
+	}
+
 	var happyConditions []string
 	var acceptedConditions []string
 	var unhappyConditions []string
